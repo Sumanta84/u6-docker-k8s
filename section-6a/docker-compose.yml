@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  docker:
+    build: .
+    container_name: docker_dind
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=
+    ports:
+      - "2375:2375"
+    networks:
+      - ci_net
+
+  jenkins:
+    build: .
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    depends_on:
+      - docker
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - ci_net
+
+  app:
+    build: .
+    container_name: node_app
+    ports:
+      - "3000:3000"
+    networks:
+      - ci_net
+
+volumes:
+  jenkins_home:
+
+networks:
+  ci_net:
+    driver: bridge

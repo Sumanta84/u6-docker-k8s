@@ -1,0 +1,24 @@
+name: project2
+services:
+  mywebsite:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3007:3000
+    volumes:
+      - u6_nodemodules:/app/node_modules
+      - .:/app
+  
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - u6_nodemodules_test:/app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+volumes: 
+  u6_nodemodules_test:
+  u6_nodemodules:

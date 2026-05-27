@@ -1,0 +1,7 @@
+name: test
+
+services:
+  webserver:
+    image: nginx
+    deploy:
+      replicas: 5
